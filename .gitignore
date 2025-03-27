@@ -1,0 +1,8 @@
+node_modules
+.env
+
+# python scripts
+*.py
+
+# python scripts output files
+*.pyout

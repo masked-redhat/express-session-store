@@ -1,0 +1,29 @@
+{
+    "name": "express-session-store",
+    "version": "1.0.0",
+    "description": "express session store",
+    "homepage": "https://github.com/masked-redhat/express-session-store#readme",
+    "bugs": {
+        "url": "https://github.com/masked-redhat/express-session-store/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/masked-redhat/express-session-store.git"
+    },
+    "license": "ISC",
+    "author": "masked-redhat",
+    "type": "module",
+    "main": "app.js",
+    "scripts": {
+        "start": "node app.js",
+        "dev": "nodemon --signal SIGINT app.js"
+    },
+    "dependencies": {
+        "express": "^4.21.2",
+        "redis": "^4.7.0"
+    },
+    "devDependencies": {
+        "dotenv": "^16.4.7",
+        "nodemon": "^3.1.9"
+    }
+}
