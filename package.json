@@ -11,7 +11,7 @@
         "url": "git+https://github.com/masked-redhat/express-session-store.git"
     },
     "license": "ISC",
-    "author": "masked-redhat",
+    "author": "masked-redhat <skhull.coding@proton.me> (https://github.com/masked-redhat)",
     "type": "module",
     "main": "app.js",
     "scripts": {
