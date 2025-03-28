@@ -1,33 +1,54 @@
-import express from "express";
-import env from "./env/env.config.js";
-import { shutdown } from "./utils/shutdown.js";
-import { initialize } from "./utils/initialize.js";
-import { setSession, validate } from "./session.js";
-import cookieParser from "cookie-parser";
+import types from "./constants/types.js";
+import Session from "./services/session.js";
 
-const app = express();
+const session = ({
+  secret,
+  expiry = 24 * 60 * 60,
+  client,
+  type = types.STANDARD,
+  breakOnInValidate = false,
+  validateToNext = false,
+  onInvalidate = () => {},
+}) => {
+  const ses = new Session(client, secret, expiry, type);
 
-app.use(cookieParser());
+  const setSession = async (req, res, value) => {
+    const sessionToken = await ses.initialize(value);
+    res.cookie("session_m", sessionToken, { httpOnly: true });
+    return sessionToken;
+  };
 
-app.get("/", (req, res) => {
-  res.send("Any body can see this");
-});
+  const validate = async (req, res = false, next = false) => {
+    const token = req.cookies["session_m"];
+    req.session = token;
+    if ([null, undefined].includes(token)) {
+      await onInvalidate(req, res);
+      if (breakOnInValidate) {
+        res.status(400).send("No session set");
+        throw new Error("No session set");
+      }
+      return false;
+    }
 
-app.get("/session", async (req, res) => {
-  await setSession(req, res, "kartikey");
-  res.send("session set");
-});
+    const result = await ses.validate(token);
+    if (!result.valid) {
+      await onInvalidate(req, res);
+      if (breakOnInValidate) {
+        res.status(400).send("Session Expired");
+        throw new Error("Session Expired");
+      }
+      return false;
+    }
 
-app.get("/test", validate, (req, res) => {
-  res.send("Only logged in can see this");
-});
+    if (validateToNext) {
+      req.sessionValue = result.value;
+      next();
+    } else return result.value;
+  };
 
-const server = app.listen(env.server.port, env.server.host, () => {
-  console.log("Server started");
-});
+  return { setSession, validate };
+};
 
-initialize();
+export const sessionTypes = types;
 
-process.on("SIGINT", async () => {
-  await shutdown(server);
-});
+export default session;
