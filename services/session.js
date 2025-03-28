@@ -1,5 +1,6 @@
 import types from "../constants/types.js";
 import { uniqStr } from "../utils/utils.js";
+import { isValidJsonObject } from "../utils/checks.js";
 import Tokens from "./tokens.js";
 
 class Session {
