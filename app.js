@@ -1,3 +1,4 @@
+import cookieParser from "cookie-parser";
 import types from "./constants/types.js";
 import Session from "./services/session.js";
 
@@ -19,6 +20,7 @@ const session = ({
   };
 
   const validate = async (req, res = false, next = false) => {
+    await new Promise((resolve) => cookieParser()(req, res, resolve)); 
     const token = req.cookies["session_m"];
     req.session = token;
     if ([null, undefined].includes(token)) {

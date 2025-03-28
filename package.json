@@ -1,6 +1,6 @@
 {
     "name": "express-session-store",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "express session store",
     "homepage": "https://github.com/masked-redhat/express-session-store#readme",
     "bugs": {
@@ -19,6 +19,7 @@
         "dev": "nodemon --signal SIGINT app.js"
     },
     "dependencies": {
+        "cookie-parser": "^1.4.7",
         "express-session-store": "file:",
         "jsonwebtoken": "^9.0.2",
         "uuid": "^11.1.0"
